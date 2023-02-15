@@ -5,7 +5,6 @@ ARG TAG
 ENV TAG $TAG
 
 WORKDIR /root
-RUN echo hello $TAG
 RUN git clone  --depth 1 https://github.com/informalsystems/hermes \
  && cd hermes \
  && git fetch --tags \

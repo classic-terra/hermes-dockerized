@@ -1,0 +1,20 @@
+[[chains]]
+id =
+rpc_addr =
+grpc_addr =
+websocket_addr =
+rpc_timeout = '10s'
+account_prefix = 'terra'
+key_name =
+store_prefix = 'ibc'
+default_gas = 100000
+max_gas = 800000
+gas_price = { price = 29, denom = 'uluna' }
+gas_multiplier = 1.2
+max_msg_num = 30
+max_tx_size = 150000
+clock_drift = '5s'
+max_block_time = '30s'
+trusting_period = '10days'
+trust_threshold = { numerator = '1', denominator = '3' }
+address_type = { derivation = 'cosmos' }

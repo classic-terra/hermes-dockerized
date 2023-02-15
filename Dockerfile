@@ -17,6 +17,7 @@ FROM debian:buster-slim
 RUN useradd -m hermes -s /bin/bash
 WORKDIR /home/hermes
 USER hermes:hermes
-ENTRYPOINT ["/usr/bin/hermes", "-V"]
-
 COPY --chown=0:0 --from=build-env /root/hermes/target/release/hermes /usr/bin/hermes
+COPY ./entrypoint.sh /hermes/entrypoint.sh
+
+ENTRYPOINT ["/hermes/entrypoint.sh"]

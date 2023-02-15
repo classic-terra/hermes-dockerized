@@ -3,8 +3,27 @@ version: '3.1'
 services:
     relayer:
         container_name: hermes-${TAG:-1.2.0}
+        command: /bin/bash
         build:
             context: .
             dockerfile: Dockerfile
             args:
                 - TAG=${TAG:-1.2.0}
+        volumes:
+            - ./init:/hermes/init
+            - ./home:/hermes/.hermes
+        environment:
+            - CHAIN_ID_A=${CHAIN_ID_A:-testnet-1}
+            - CHAIN_ID_B=${CHAIN_ID_B:-testnet-2}
+            - RPC_ADDR_A=${RPC_ADDR_A:-http://rpc-testnet-1.com}
+            - RPC_ADDR_B=${RPC_ADDR_B:-http://rpc-testnet-2.com}
+            - GRPC_ADDR_A=${GRPC_ADDR_A:-http://grpc-testnet-1.com}
+            - GRPC_ADDR_B=${GRPC_ADDR_B:-http://grpc-testnet-2.com}
+            - WEBSOCK_ADDR_A=${WEBSOCK_ADDR_A:-ws://ws-testnet-1.com/websocket}
+            - WEBSOCK_ADDR_B=${WEBSOCK_ADDR_B:-ws://ws-testnet-2.com/websocket}
+            - RPC_PORT_A=${RPC_PORT_A:-26657}
+            - RPC_PORT_B=${RPC_PORT_B:-26657}
+            - GRPC_PORT_A=${GRPC_PORT_A:-9090}
+            - GRPC_PORT_B=${GRPC_PORT_B:-9090}
+            - WEBSOCK_PORT_A=${WEBSOCK_PORT_A:-1317}
+            - WEBSOCK_PORT_B=${WEBSOCK_PORT_B:-1317}

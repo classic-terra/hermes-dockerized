@@ -48,7 +48,7 @@ if [ -f /hermes/init/a_mnemonic ] && [ -f /hermes/init/b_mnemonic ]; then
 	
 	# shred the user provided keys
 	shred -n 100 -u /hermes/init/a_mnemonic
-	shred -n 100 -u /hermes/init/a_mnemonic
+	shred -n 100 -u /hermes/init/b_mnemonic
 	
 fi
 

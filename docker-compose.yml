@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+    relayer:
+        container_name: hermes-${TAG:-1.2.0}
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                - TAG=${TAG:-1.2.0}

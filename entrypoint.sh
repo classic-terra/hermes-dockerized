@@ -37,8 +37,8 @@ if [ -f /hermes/init/a_mnemonic ] && [ -f /hermes/init/b_mnemonic ]; then
 	cat /hermes/.hermes/chain_a.toml >> /hermes/.hermes/config.toml
 	cat /hermes/.hermes/chain_b.toml >> /hermes/.hermes/config.toml
 	
-	hermes --config /hermes/.hermes/config.toml keys add --chain ${CHAIN_ID_A} --mnemonic-file /hermes/init/a_mnemonic
-	hermes --config /hermes/.hermes/config.toml keys add --chain ${CHAIN_ID_B} --mnemonic-file /hermes/init/b_mnemonic
+	hermes --config /hermes/.hermes/config.toml keys add --chain ${CHAIN_ID_A} --mnemonic-file /hermes/init/a_mnemonic --hd-path "m/44'/330'/0'/0/0"
+	hermes --config /hermes/.hermes/config.toml keys add --chain ${CHAIN_ID_B} --mnemonic-file /hermes/init/b_mnemonic --hd-path "m/44'/330'/0'/0/0"
 	
 	RES=$(hermes health-check)
 	if [ ${RES} -ne 0 ]; then

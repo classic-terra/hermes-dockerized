@@ -9,46 +9,49 @@ function fill_template() {
 
 set -e
 
-if [ -f /hermes/init/a_mnemonic ] && [ -f /hermes/init/b_mnemonic ]; then
+if [ -f /home/hermes/init/a_mnemonic ] && [ -f /home/hermes/init/b_mnemonic ]; then
 	
 	echo "is uninitialized"
 	
-	rm -Rf /hermes/.hermes/*
-	cp /hermes/init/config.toml /hermes/.hermes
-	touch /hermes/.hermes/chain_a.toml
-	touch /hermes/.hermes/chain_b.toml
+	rm -Rf /home/hermes/.hermes/*
+	cp /home/hermes/init/config.toml /home/hermes/.hermes
+	touch /home/hermes/.hermes/chain_a.toml
+	touch /home/hermes/.hermes/chain_b.toml
 	
 	#setup chain A
-	cp /hermes/init/chain_template /hermes/.hermes/chain_a.toml
-	fill_template /hermes/.hermes/chain_a.toml id ${CHAIN_ID_A}
-	fill_template /hermes/.hermes/chain_a.toml grpc_addr "${GRPC_ADDR_A}:${GRPC_PORT_A}"
-	fill_template /hermes/.hermes/chain_a.toml rpc_addr "${RPC_ADDR_A}:${RPC_PORT_A}"
-	fill_template /hermes/.hermes/chain_a.toml websocket_addr "${WEBSOCK_ADDR_A}:${WEBSOCK_PORT_A}"
-	fill_template /hermes/.hermes/chain_a.toml key_name "key_a"
+	cp /home/hermes/init/chain_template /home/hermes/.hermes/chain_a.toml
+	fill_template /home/hermes/.hermes/chain_a.toml id ${CHAIN_ID_A}
+	fill_template /home/hermes/.hermes/chain_a.toml grpc_addr "${GRPC_ADDR_A}"
+	fill_template /home/hermes/.hermes/chain_a.toml rpc_addr "${RPC_ADDR_A}"
+	fill_template /home/hermes/.hermes/chain_a.toml websocket_addr "${WEBSOCK_ADDR_A}"
+	fill_template /home/hermes/.hermes/chain_a.toml key_name "key_a"
+	fill_template /home/hermes/.hermes/chain_a.toml account_prefix "${PREFIX_A}"
 	
 	#setup chain B
-	cp /hermes/init/chain_template /hermes/.hermes/chain_b.toml
-	fill_template /hermes/.hermes/chain_b.toml id ${CHAIN_ID_B}
-	fill_template /hermes/.hermes/chain_b.toml grpc_addr "${GRPC_ADDR_B}:${GRPC_PORT_B}"
-	fill_template /hermes/.hermes/chain_b.toml rpc_addr "${RPC_ADDR_B}:${RPC_PORT_B}"
-	fill_template /hermes/.hermes/chain_b.toml websocket_addr "${WEBSOCK_ADDR_B}:${WEBSOCK_PORT_B}"
-	fill_template /hermes/.hermes/chain_b.toml key_name "key_b"
+	cp /home/hermes/init/chain_template /home/hermes/.hermes/chain_b.toml
+	fill_template /home/hermes/.hermes/chain_b.toml id ${CHAIN_ID_B}
+	fill_template /home/hermes/.hermes/chain_b.toml grpc_addr "${GRPC_ADDR_B}"
+	fill_template /home/hermes/.hermes/chain_b.toml rpc_addr "${RPC_ADDR_B}"
+	fill_template /home/hermes/.hermes/chain_b.toml websocket_addr "${WEBSOCK_ADDR_B}"
+	fill_template /home/hermes/.hermes/chain_b.toml key_name "key_b"
+	fill_template /home/hermes/.hermes/chain_b.toml account_prefix "${PREFIX_B}"
+
+	cat /home/hermes/.hermes/chain_a.toml >> /home/hermes/.hermes/config.toml
+	cat /home/hermes/.hermes/chain_b.toml >> /home/hermes/.hermes/config.toml
 	
-	cat /hermes/.hermes/chain_a.toml >> /hermes/.hermes/config.toml
-	cat /hermes/.hermes/chain_b.toml >> /hermes/.hermes/config.toml
+	hermes keys add --chain ${CHAIN_ID_A} --mnemonic-file /home/hermes/init/a_mnemonic --hd-path "m/44'/"$COINTYPE_A"'/0'/0/0"
+	hermes keys add --chain ${CHAIN_ID_B} --mnemonic-file /home/hermes/init/b_mnemonic --hd-path "m/44'/"$COINTYPE_B"'/0'/0/0"
 	
-	hermes --config /hermes/.hermes/config.toml keys add --chain ${CHAIN_ID_A} --mnemonic-file /hermes/init/a_mnemonic --hd-path "m/44'/330'/0'/0/0"
-	hermes --config /hermes/.hermes/config.toml keys add --chain ${CHAIN_ID_B} --mnemonic-file /hermes/init/b_mnemonic --hd-path "m/44'/330'/0'/0/0"
-	
-	RES=$(hermes health-check)
+	hermes health-check
+	RES=$?
 	if [ ${RES} -ne 0 ]; then
 		echo "configuration seems to be malformed"
 		exit -1
 	fi
 	
 	# shred the user provided keys
-	shred -n 100 -u /hermes/init/a_mnemonic
-	shred -n 100 -u /hermes/init/b_mnemonic
+	shred -n 100 -u /home/hermes/init/a_mnemonic
+	shred -n 100 -u /home/hermes/init/b_mnemonic
 	
 fi
 
